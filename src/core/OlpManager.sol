@@ -20,7 +20,7 @@ contract OlpManager is ReentrancyGuard, Governable, IOlpManager {
 
     uint256 public constant PRICE_PRECISION = 10 ** 30;
     uint256 public constant USDG_DECIMALS = 18;
-    uint256 public constant GLP_PRECISION = 10 ** 18;
+    uint256 public constant OLP_PRECISION = 10 ** 18;
     uint256 public constant MAX_COOLDOWN_DURATION = 48 hours;
     uint256 public constant BASIS_POINTS_DIVISOR = 10000;
 
@@ -118,7 +118,7 @@ contract OlpManager is ReentrancyGuard, Governable, IOlpManager {
     function getPrice(bool _maximise) external view returns (uint256) {
         uint256 aum = getAum(_maximise);
         uint256 supply = IERC20(olp).totalSupply();
-        return aum.mul(GLP_PRECISION).div(supply);
+        return aum.mul(OLP_PRECISION).div(supply);
     }
 
     function getAums() public view returns (uint256[] memory) {
@@ -218,7 +218,7 @@ contract OlpManager is ReentrancyGuard, Governable, IOlpManager {
         require(usdgAmount >= _minUsdg, "OlpManager: insufficient USDG output");
 
         uint256 mintAmount = aumInUsdg == 0 ? usdgAmount : usdgAmount.mul(olpSupply).div(aumInUsdg);
-        require(mintAmount >= _minOlp, "OlpManager: insufficient GLP output");
+        require(mintAmount >= _minOlp, "OlpManager: insufficient OLP output");
 
         IMintable(olp).mint(_account, mintAmount);
 
